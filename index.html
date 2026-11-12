@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMNI DELTA ENGINE v6.0</title>
+    <style>
+        :root {
+            --bg: #06152E;
+            --panel: #0B2345;
+            --panel2: #102D55;
+            --blue: #168BFF;
+            --cyan: #42D9FF;
+            --white: #FFFFFF;
+            --muted: #A9C5E8;
+            --green: #4DFFB5;
+            --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--white);
+            font-family: var(--font);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 1120px;
+        }
+
+        header h1 {
+            color: var(--cyan);
+            font-size: 29px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            color: var(--muted);
+            font-size: 9px;
+            font-weight: bold;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 1120px;
+            flex: 1;
+        }
+
+        @media (max-width: 850px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background-color: var(--panel);
+            border: 1px solid var(--blue);
+            border-radius: 4px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-title {
+            color: var(--cyan);
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .panel-subtitle {
+            color: var(--muted);
+            font-size: 9px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label.field-label {
+            color: var(--muted);
+            font-size: 9px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        input[type="date"], select {
+            width: 100%;
+            background-color: var(--panel2);
+            color: var(--white);
+            border: 1px solid var(--blue);
+            padding: 10px;
+            font-family: var(--font);
+            font-size: 12px;
+            border-radius: 2px;
+            outline: none;
+            margin-bottom: 15px;
+        }
+
+        input[type="date"]:focus, select:focus {
+            border-color: var(--cyan);
+        }
+
+        .btn {
+            background-color: var(--blue);
+            color: var(--white);
+            border: none;
+            padding: 12px;
+            font-family: var(--font);
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            width: 100%;
+            transition: background 0.2s;
+            text-transform: uppercase;
+            margin-top: auto;
+        }
+
+        .btn:hover {
+            background-color: var(--cyan);
+            color: var(--bg);
+        }
+
+        .result-box, .countdown-box {
+            background-color: var(--panel2);
+            border-radius: 4px;
+            padding: 20px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .result-box h3, .countdown-box h3 {
+            color: var(--cyan);
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .result-content {
+            color: var(--white);
+            font-size: 12px;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .festival-title {
+            color: var(--white);
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            word-break: break-word;
+        }
+
+        .days-display {
+            color: var(--cyan);
+            font-size: 42px;
+            font-weight: bold;
+            margin: 10px 0 0 0;
+        }
+
+        .days-label-text {
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .clock-display {
+            color: var(--white);
+            font-size: 22px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .target-label {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        .status-label {
+            color: var(--green);
+            font-size: 9px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        footer {
+            margin-top: 20px;
+            color: var(--muted);
+            font-size: 8px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>OMNI DELTA</h1>
+        <p>COMPLIANT ENGINE / DATE & FESTIVAL SYSTEM</p>
+    </header>
+
+    <div class="main-container">
+        <!-- LEFT PANEL - DATE CALCULATOR -->
+        <div class="panel">
+            <div class="panel-title">DATE DIFFERENCE CALCULATOR</div>
+            <div class="panel-subtitle">Enter two dates to calculate the difference</div>
+
+            <div>
+                <label class="field-label">Start Date (YYYY-MM-DD)</label>
+                <input type="date" id="startDate">
+            </div>
+
+            <div>
+                <label class="field-label">End Date (YYYY-MM-DD)</label>
+                <input type="date" id="endDate">
+            </div>
+
+            <div class="result-box">
+                <h3>CALCULATION RESULTS</h3>
+                <div class="result-content" id="calcResult">Your results will appear here.</div>
+            </div>
+
+            <button class="btn" onclick="calculateBetween()">Calculate Difference</button>
+        </div>
+
+        <!-- RIGHT PANEL - FESTIVAL COUNTDOWN -->
+        <div class="panel">
+            <div class="panel-title">FESTIVAL COUNTDOWN</div>
+            <div class="panel-subtitle">Select a festival to see its next countdown</div>
+
+            <div>
+                <label class="field-label">Select Festival</label>
+                <select id="festivalSelect" onchange="selectFestival()"></select>
+            </div>
+
+            <div class="countdown-box">
+                <h3>NEXT OCCURRENCE</h3>
+                <div class="festival-title" id="festivalTitle">SELECT A FESTIVAL</div>
+                <div class="days-display" id="daysDisplay">---</div>
+                <div class="days-label-text">DAYS</div>
+                <div class="clock-display" id="clockDisplay">00 : 00 : 00</div>
+                <div class="target-label" id="targetLabel">Choose a festival above</div>
+                <div class="status-label" id="statusLabel">SYSTEM READY</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        OMNI DELTA ENGINE • VERSION 6.0 • BLUE SYSTEM INTERFACE
+    </footer>
+
+    <script>
+        // Festival Lists and Dates ported directly from Python script
+        const INDIA_FESTIVALS = [
+            "Diwali", "Holi", "Durga Puja / Navratri", "Ganesh Chaturthi", "Eid-ul-Fitr",
+            "Eid-al-Adha", "Christmas", "Raksha Bandhan", "Krishna Janmashtami", "Maha Shivratri",
+            "Makar Sankranti / Pongal / Bihu", "Onam", "Chhath Puja", "Vaisakhi", "Guru Nanak Gurpurab",
+            "Buddha Purnima", "Mahavir Jayanti", "Karwa Chauth", "Ratha Yatra", "Dussehra (Vijayadashami)",
+            "Independence Day (August 15)", "Republic Day (January 26)", "Gandhi Jayanti",
+            "Losar (Tibetan New Year)", "Hornbill Festival"
+        ];
+
+        const USA_FESTIVALS = [
+            "Independence Day (Fourth of July)", "Thanksgiving", "Christmas", "Halloween",
+            "New Year's Eve / New Year's Day", "Memorial Day", "Labor Day", "Juneteenth",
+            "Martin Luther King Jr. Day", "Super Bowl Sunday", "Mardi Gras", "St. Patrick's Day",
+            "Easter", "Valentine's Day", "Mother's Day", "Father's Day", "Veterans Day",
+            "Presidents' Day", "Columbus Day / Indigenous Peoples' Day", "Groundhog Day",
+            "Cinco de Mayo", "Hanukkah", "Kwanzaa", "Coachella Valley Music and Arts Festival", "Burning Man"
+        ];
+
+        const FESTIVALS = [
+            ...INDIA_FESTIVALS.map(name => "INDIA • " + name),
+            ...USA_FESTIVALS.map(name => "USA • " + name)
+        ];
+
+        const MOVABLE_DATES = {
+            2026: {
+                "INDIA • Guru Nanak Gurpurab": [11, 24], "INDIA • Hornbill Festival": [12, 1],
+                "INDIA • Christmas": [12, 25], "USA • Christmas": [12, 25],
+                "USA • Thanksgiving": [11, 26], "USA • Hanukkah": [12, 4], "USA • Kwanzaa": [12, 26]
+            },
+            2027: {
+                "INDIA • Maha Shivratri": [3, 6], "INDIA • Eid-ul-Fitr": [3, 10], "INDIA • Holi": [3, 22],
+                "INDIA • Eid-al-Adha": [5, 17], "INDIA • Buddha Purnima": [5, 20], "INDIA • Ratha Yatra": [7, 5],
+                "INDIA • Raksha Bandhan": [8, 17], "INDIA • Krishna Janmashtami": [8, 25], "INDIA • Ganesh Chaturthi": [9, 4],
+                "INDIA • Onam": [9, 12], "INDIA • Durga Puja / Navratri": [10, 5], "INDIA • Dussehra (Vijayadashami)": [10, 9],
+                "INDIA • Karwa Chauth": [10, 18], "INDIA • Diwali": [10, 29], "INDIA • Chhath Puja": [11, 4],
+                "INDIA • Guru Nanak Gurpurab": [11, 14], "INDIA • Losar (Tibetan New Year)": [2, 7],
+                "INDIA • Mahavir Jayanti": [4, 19], "INDIA • Makar Sankranti / Pongal / Bihu": [1, 15],
+                "INDIA • Vaisakhi": [4, 14], "INDIA • Hornbill Festival": [12, 1],
+                "USA • Hanukkah": [12, 25], "USA • Kwanzaa": [12, 26]
+            }
+        };
+
+        const FIXED_DATES = {
+            "INDIA • Christmas": [12, 25], "USA • Christmas": [12, 25],
+            "INDIA • Independence Day (August 15)": [8, 15], "INDIA • Republic Day (January 26)": [1, 26],
+            "INDIA • Gandhi Jayanti": [10, 2], "USA • Independence Day (Fourth of July)": [7, 4],
+            "USA • Halloween": [10, 31], "USA • Valentine's Day": [2, 14], "USA • St. Patrick's Day": [3, 17],
+            "USA • Veterans Day": [11, 11], "USA • Groundhog Day": [2, 2], "USA • Cinco de Mayo": [5, 5],
+            "USA • Kwanzaa": [12, 26]
+        };
+
+        function getNthWeekday(year, month, weekday, n) {
+            const firstDay = new Date(year, month - 1, 1);
+            let offset = (weekday - firstDay.getDay() + 7) % 7;
+            let day = 1 + offset + (n - 1) * 7;
+            return new Date(year, month - 1, day);
+        }
+
+        function getLastWeekday(year, month, weekday) {
+            let lastDay = new Date(year, month, 0).getDate();
+            let result = new Date(year, month - 1, lastDay);
+            while (result.getDay() !== weekday) {
+                result.setDate(result.getDate() - 1);
+            }
+            return result;
+        }
+
+        function getEasterDate(year) {
+            const a = year % 19, b = Math.floor(year / 100), c = year % 100;
+            const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+            const g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+            const i = Math.floor(c / 4), k = c % 4;
+            const l = (32 + 2 * e + 2 * i - h - k) % 7;
+            const m = Math.floor((a + 11 * h + 22 * l) / 451);
+            const month = Math.floor((h + l - 7 * m + 114) / 31);
+            const day = ((h + l - 7 * m + 114) % 31) + 1;
+            return new Date(year, month - 1, day);
+        }
+
+        function getUSFestivalDate(name, year) {
+            if (name === "USA • Thanksgiving") return getNthWeekday(year, 11, 4, 4); // Thursday = 4
+            if (name === "USA • Memorial Day") return getLastWeekday(year, 5, 1); // Monday = 1
+            if (name === "USA • Labor Day") return getNthWeekday(year, 9, 1, 1);
+            if (name === "USA • Juneteenth") return new Date(year, 5, 19);
+            if (name === "USA • Martin Luther King Jr. Day") return getNthWeekday(year, 1, 1, 3);
+            if (name === "USA • Presidents' Day") return getNthWeekday(year, 2, 1, 3);
+            if (name === "USA • Columbus Day / Indigenous Peoples' Day") return getNthWeekday(year, 10, 1, 2);
+            if (name === "USA • Mother's Day") return getNthWeekday(year, 5, 0, 2); // Sunday = 0
+            if (name === "USA • Father's Day") return getNthWeekday(year, 6, 0, 3);
+            if (name === "USA • Easter") return getEasterDate(year);
+            if (name === "USA • Mardi Gras") {
+                let d = getEasterDate(year);
+                d.setDate(d.getDate() - 47);
+                return d;
+            }
+            if (name === "USA • Super Bowl Sunday") return getNthWeekday(year, 2, 0, 2);
+            return null;
+        }
+
+        function getNextFestivalDate(name) {
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            let possibleDates = [];
+
+            if (FIXED_DATES[name]) {
+                const [m, d] = FIXED_DATES[name];
+                for (let y = today.getFullYear(); y <= today.getFullYear() + 6; y++) {
+                    possibleDates.push(new Date(y, m - 1, d));
+                }
+            }
+
+            let calc1 = getUSFestivalDate(name, today.getFullYear());
+            if (calc1) possibleDates.push(calc1);
+            let calc2 = getUSFestivalDate(name, today.getFullYear() + 1);
+            if (calc2) possibleDates.push(calc2);
+
+            for (let [y, fests] of Object.entries(MOVABLE_DATES)) {
+                if (fests[name]) {
+                    const [m, d] = fests[name];
+                    possibleDates.push(new Date(parseInt(y), m - 1, d));
+                }
+            }
+
+            let futureDates = possibleDates.filter(d => d >= today);
+            if (futureDates.length === 0) return null;
+
+            return new Date(Math.min(...futureDates));
+        }
+
+        // Initialize Form Inputs
+        document.getElementById('startDate').valueAsDate = new Date();
+        let tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 10);
+        document.getElementById('endDate').valueAsDate = tomorrow;
+
+        // Populate Festival Dropdown
+        const selectEl = document.getElementById('festivalSelect');
+        FESTIVALS.forEach(f => {
+            let opt = document.createElement('option');
+            opt.value = f;
+            opt.textContent = f;
+            selectEl.appendChild(opt);
+        });
+
+        // Calculator Logic
+        function calculateBetween() {
+            const startVal = document.getElementById('startDate').value;
+            const endVal = document.getElementById('endDate').value;
+            if (!startVal || !endVal) {
+                alert("Please enter both dates.");
+                return;
+            }
+
+            const start = new Date(startVal);
+            const end = new Date(endVal);
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            const weeks = Math.floor(diffDays / 7);
+            const remDays = diffDays % 7;
+            const hours = diffDays * 24;
+            const minutes = hours * 60;
+
+            let earlier = start < end ? start : end;
+            let later = start < end ? end : start;
+
+            let years = later.getFullYear() - earlier.getFullYear();
+            let months = later.getMonth() - earlier.getMonth();
+            let days = later.getDate() - earlier.getDate();
+
+            if (days < 0) {
+                months--;
+                let prevMonth = new Date(later.getFullYear(), later.getMonth(), 0);
+                days += prevMonth.getDate();
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            document.getElementById('calcResult').innerText = 
+                `TOTAL DAYS\n${diffDays.toLocaleString()} days\n\n` +
+                `WEEKS\n${weeks} weeks and ${remDays} days\n\n` +
+                `CALENDAR DIFFERENCE\n${years} years, ${months} months, ${days} days\n\n` +
+                `TOTAL HOURS\n${hours.toLocaleString()} hours\n\n` +
+                `TOTAL MINUTES\n${minutes.toLocaleString()} minutes`;
+        }
+
+        calculateBetween();
+
+        // Countdown Logic
+        let selectedDate = null;
+
+        function selectFestival() {
+            const festivalName = selectEl.value;
+            document.getElementById('festivalTitle').innerText = festivalName.split(" • ")[1];
+            selectedDate = getNextFestivalDate(festivalName);
+
+            if (!selectedDate) {
+                document.getElementById('daysDisplay').innerText = "N/A";
+                document.getElementById('clockDisplay').innerText = "-- : -- : --";
+                document.getElementById('targetLabel').innerText = "Date not currently available in built-in calendar.";
+                document.getElementById('statusLabel').innerText = "CALENDAR DATA UNAVAILABLE";
+                document.getElementById('statusLabel').style.color = "#FFB86B";
+                return;
+            }
+
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('targetLabel').innerText = "Next occurrence: " + selectedDate.toLocaleDateString('en-US', options);
+            document.getElementById('statusLabel').innerText = "COUNTDOWN ACTIVE";
+            document.getElementById('statusLabel').style.color = "var(--green)";
+            updateCountdown();
+        }
+
+        function updateCountdown() {
+            if (!selectedDate) return;
+            const now = new Date();
+            const target = new Date(selectedDate);
+            target.setHours(0,0,0,0);
+
+            const remainingSecs = Math.floor((target - now) / 1000);
+
+            if (remainingSecs <= 0) {
+                document.getElementById('daysDisplay').innerText = "0";
+                document.getElementById('clockDisplay').innerText = "00 : 00 : 00";
+                document.getElementById('statusLabel').innerText = "TODAY IS THE DAY!";
+            } else {
+                const days = Math.floor(remainingSecs / 86400);
+                const hours = Math.floor((remainingSecs % 86400) / 3600);
+                const minutes = Math.floor((remainingSecs % 3600) / 60);
+                const seconds = remainingSecs % 60;
+
+                document.getElementById('daysDisplay').innerText = days.toLocaleString();
+                document.getElementById('clockDisplay').innerText = 
+                    String(hours).padStart(2, '0') + " : " + 
+                    String(minutes).padStart(2, '0') + " : " + 
+                    String(seconds).padStart(2, '0');
+            }
+        }
+
+        selectFestival();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
