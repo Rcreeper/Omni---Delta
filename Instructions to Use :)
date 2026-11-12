@@ -1,0 +1,10 @@
+Steps:
+
+For Windows Users:-
+1. Download the File and store it on a accessible place on the File Explorer
+2. Click on the aAddress bar on the File Explorer page you have saved the file on, and type CMD
+3. Once Command Prompt is open, exactly type, python omni_delta.py
+
+Note 
+1. If Python isn't recognized use py omni_delta.py.
+2. Ensure Python is installed
