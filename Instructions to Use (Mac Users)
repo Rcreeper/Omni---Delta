@@ -1,0 +1,9 @@
+For Mac Users:-
+
+1. Download the file (omni_delta.py) and save it in an accessible folder in Finder (such as Desktop or Downloads).
+2. Right-click (or Control-click) on that folder in Finder and select New Terminal at Folder.
+3. Once Terminal is open, type python3 omni_delta.py and press Return:
+
+Note
+1. On macOS, python3 is the standard command instead of python.
+2. Ensure Python 3 is installed (if macOS prompts you to install Command Line Developer Tools or Python, follow the on-screen installer or download it from python.org).
